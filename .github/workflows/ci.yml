@@ -9,9 +9,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -e '.[dev]'
-      - run: ruff check src tests examples
+      - run: ruff check src tests examples scripts
       - run: pytest -q
       - run: agentgate benchmark --output artifacts/evaluation.json
+      - run: docker build -t agentgate:ci .
+      - run: docker run -d --name agentgate-docker-smoke -p 127.0.0.1:8001:8000 agentgate:ci
+      - run: python scripts/verify_container.py
       - uses: actions/upload-artifact@v4
         with:
           name: authorization-evaluation

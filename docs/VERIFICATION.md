@@ -25,7 +25,15 @@ Headless Edge verification covered login, a permitted query, a prohibited query,
 
 The Python suite exercises actual HTTP connector calls and an official MCP SDK client over localhost, alongside security invariants and concurrency checks. Run `pytest -q` for the current test count/results rather than relying on a static count here.
 
-## Not verified here
+## Docker verification
 
-Docker Desktop's engine was unavailable. Container packaging is included, but a successful container build/run is not claimed. No real private company documents, cloud accounts, or third-party production services were used. The configured HTTP connector test ran against a real local HTTP service.
+After Docker Desktop was started, the image built successfully with engine 29.7.2. A container running as UID 10001 on localhost port 8001 passed REST authorization, human approval, CSV export/redaction, approval replay denial, audit-chain verification, and official MCP SDK checks. The container reached the host Ollama model-list endpoint. The repeatable smoke script is `scripts/verify_container.py`; add `--with-model` to require an actual model-driven task through the container's streaming agent endpoint.
+
+An additional container-driven live-model attempt failed when Ollama could not allocate a 660 MB CPU repacking buffer after Docker was started. The earlier native real-model workflows completed successfully. This later failure is a host memory constraint; container-driven model execution is not claimed as successfully verified. A provider listing the model does not establish that enough memory is available to load it.
+
+CI builds the image and verifies its REST/MCP/security workflow. CI does not request the optional live-model portion and reports it as not requested.
+
+## External services
+
+No real private company documents, cloud accounts, or third-party production services were used. The configured HTTP connector test ran against a real local HTTP service.
 

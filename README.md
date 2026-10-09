@@ -182,7 +182,7 @@ docker compose exec agentgate agentgate credentials --role support
 
 The container runs as an unprivileged user and stores data in a named volume. The published port binds only to localhost. On Windows/macOS Docker Desktop, the model URL points to host Ollama. Ollama must be reachable from the container; its default loopback binding can prevent that. Native Python is the default supported local path. For an isolated Docker model deployment, run an Ollama service on the same private Docker network and point `AGENTGATE_MODEL_URL` at that service. Do not expose the model port publicly.
 
-This repository includes container packaging; see [security guidance](docs/SECURITY.md) before exposing any service beyond localhost.
+The container build and REST/MCP/security workflow have been verified on Docker Desktop. A running container can be checked with `python scripts/verify_container.py --container <name> --url http://127.0.0.1:<port>`. The script reads bootstrap credentials inside the container without displaying them. Add `--with-model` to require a live model-driven task; the host must have sufficient free memory for inference as well as Docker. CI also builds the image and runs the container smoke check. See [verification results](docs/VERIFICATION.md) and [security guidance](docs/SECURITY.md).
 
 ## Submission archive
 
