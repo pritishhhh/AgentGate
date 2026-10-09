@@ -1,0 +1,20 @@
+# Optional real HTTP integrations, managed by the operator, never by a model.
+# Restart after editing data/connectors.yaml. Only fixed HTTP(S) URLs are permitted.
+connectors: {}
+# Example:
+#   helpdesk:
+#     tenant: acme
+#     roles: [support, admin]
+#     operations:
+#       create_ticket:
+#         url: https://your-helpdesk.example/api/tickets
+#         method: POST
+#         approval: true
+#         credential_env: HELPDESK_API_KEY
+#         schema:
+#           type: object
+#           additionalProperties: false
+#           required: [title]
+#           properties:
+#             title: {type: string, minLength: 1, maxLength: 200}
+

@@ -1,0 +1,10 @@
+.venv
+.runtime
+data
+.git
+.env
+tests
+artifacts
+docs
+*.log
+

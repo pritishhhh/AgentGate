@@ -1,0 +1,11 @@
+version: 1
+roles:
+  support: [search_documents, read_document, query_records, export_report, invoke_connector]
+  finance: [search_documents, read_document, query_records, export_report, invoke_connector]
+  admin: [search_documents, read_document, query_records, export_report, invoke_connector]
+classifications:
+  support: [public, support]
+  finance: [public, finance]
+  admin: [public, support, finance]
+approval_tools: [export_report]
+

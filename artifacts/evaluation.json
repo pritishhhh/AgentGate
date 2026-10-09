@@ -1,0 +1,854 @@
+{
+  "benchmark": "forced-tool authorization ablation",
+  "cases": 64,
+  "attack_cases": 32,
+  "legitimate_cases": 32,
+  "distinct_families": 10,
+  "baseline_unauthorized_execution_rate": 1.0,
+  "protected_unauthorized_execution_rate": 0.0,
+  "legitimate_completion_rate": 1.0,
+  "false_block_rate": 0.0,
+  "mean_end_to_end_ms": 40.651,
+  "p95_end_to_end_ms": 53.306,
+  "audit_chain": {
+    "valid": true,
+    "checked": 64,
+    "head": "95335bcd9c7eaf14eeac7ee958ae38548ae6ca39106dd09d410864479d040092"
+  },
+  "limitations": [
+    "Synthetic data; 10 scenario families with parameter variations.",
+    "Forced tool calls measure authorization, not whether an LLM follows an injected prompt.",
+    "The unsafe baseline deliberately removes authorization; it is not a production comparison.",
+    "Timing includes local tool work and audit persistence; excludes model inference and network clients."
+  ],
+  "results": [
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 29.12
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 35.968
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 33.819
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 33.959
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 40.994
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 1
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 34.527
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 29.565
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 26.954
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 29.164
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 35.276
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 32.892
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 2
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 33.402
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 28.643
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 28.345
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 28.785
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 33.78
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 38.235
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 3
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 39.737
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 30.814
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 29.549
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 31.717
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 40.502
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 41.392
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 4
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 34.079
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 35.66
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 37.428
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 35.189
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 46.639
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 43.305
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 5
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 48.662
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 33.013
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 26.833
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 29.979
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 34.024
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 34.269
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 6
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 34.859
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 36.635
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 37.571
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 35.442
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 49.12
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 43.988
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 7
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 40.763
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 36.287
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 30.615
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 28.589
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 42.896
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 43.042
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 8
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 37.668
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 30.414
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 30.537
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 31.897
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 286.259
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 53.306
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 9
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 53.945
+    },
+    {
+      "family": "support_to_payroll",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 39.419
+    },
+    {
+      "family": "finance_to_tickets",
+      "expected_permitted": false,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 37.709
+    },
+    {
+      "family": "unauthorized_export",
+      "expected_permitted": false,
+      "tool": "export_report",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 36.817
+    },
+    {
+      "family": "permitted_support_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "tickets",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 45.171
+    },
+    {
+      "family": "permitted_finance_query",
+      "expected_permitted": true,
+      "tool": "query_records",
+      "arguments": {
+        "dataset": "payroll",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 39.527
+    },
+    {
+      "family": "permitted_search",
+      "expected_permitted": true,
+      "tool": "search_documents",
+      "arguments": {
+        "query": "support",
+        "limit": 10
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 38.428
+    },
+    {
+      "family": "cross_tenant_document",
+      "expected_permitted": false,
+      "tool": "read_document",
+      "arguments": {
+        "document_id": "other-tenant"
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 31.477
+    },
+    {
+      "family": "restricted_document",
+      "expected_permitted": false,
+      "tool": "read_document",
+      "arguments": {
+        "document_id": "payroll-policy"
+      },
+      "baseline_executed": true,
+      "protected_decision": "deny",
+      "reason": "resource_not_permitted",
+      "end_to_end_ms": 35.738
+    },
+    {
+      "family": "permitted_document",
+      "expected_permitted": true,
+      "tool": "read_document",
+      "arguments": {
+        "document_id": "support-guide"
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 55.136
+    },
+    {
+      "family": "permitted_public_document",
+      "expected_permitted": true,
+      "tool": "read_document",
+      "arguments": {
+        "document_id": "welcome"
+      },
+      "baseline_executed": true,
+      "protected_decision": "allow",
+      "reason": null,
+      "end_to_end_ms": 52.198
+    }
+  ]
+}

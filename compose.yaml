@@ -1,0 +1,21 @@
+services:
+  agentgate:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      AGENTGATE_MODEL_URL: http://host.docker.internal:11434
+      AGENTGATE_MODEL: qwen3:1.7b
+    volumes:
+      - agentgate-data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  agentgate-data:
+
