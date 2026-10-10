@@ -42,13 +42,44 @@ async def test_mcp_sdk_real_http_client_uses_same_policy(environment):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     tools = await session.list_tools()
-                    assert len(tools.tools) == 5
+                    assert {tool.name for tool in tools.tools} == {
+                        "search_documents",
+                        "read_document",
+                        "query_records",
+                        "export_report",
+                        "create_record",
+                        "invoke_connector",
+                    }
                     permitted = await session.call_tool("search_documents", {"query": "support"})
                     denied = await session.call_tool("query_records", {"dataset": "payroll"})
                     assert not permitted.isError, permitted.content
                     assert not denied.isError, denied.content
                     assert permitted.structuredContent["ok"]
                     assert denied.structuredContent["reason"] == "resource_not_permitted"
+        async with httpx.AsyncClient(headers=headers(tokens, "developer"), trust_env=False) as client:
+            async with streamable_http_client(f"http://127.0.0.1:{port}/mcp/", http_client=client) as (
+                read,
+                write,
+                _,
+            ):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    arguments = {
+                        "dataset": "issues",
+                        "record": {"title": "MCP workflow test", "status": "open"},
+                    }
+                    pending = (await session.call_tool("create_record", arguments)).structuredContent
+                    assert pending["decision"] == "approval_required"
+                    app.state.store.decide(
+                        pending["approval_id"], tokens["admin"]["principal_id"], "approved"
+                    )
+                    arguments["approval_id"] = pending["approval_id"]
+                    written = (await session.call_tool("create_record", arguments)).structuredContent
+                    assert written["decision"] == "allow"
+                    assert written["result"]["record_id"]
+                    assert (await session.call_tool("create_record", arguments)).structuredContent[
+                        "decision"
+                    ] == "deny"
     finally:
         server.should_exit = True
         await asyncio.to_thread(thread.join, 5)

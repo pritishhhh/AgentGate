@@ -25,6 +25,7 @@ for name in allowed_directories:
 for name in (
     "evaluation.json",
     "live-model.json",
+    "live-workflows.json",
     "dashboard.png",
     "agent-console.png",
     "tool-lab.png",

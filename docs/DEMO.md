@@ -9,6 +9,8 @@
 
 ## Questions to prepare for
 
+The general-purpose workflow extension is demonstrated in [WORKFLOWS.md](WORKFLOWS.md): development issue creation and incident triage use the same authorization and approval boundary as document assistance. Show a custom role/dataset to explain how the project adapts to different applications. Choose live-model tasks that actually completed on your machine; use the Tool Lab to inspect the deterministic controls independently.
+
 - Why is an LLM-based allow/deny classifier insufficient as the authorization boundary?
 - How does tenant isolation apply to search as well as direct document reads?
 - What prevents changing tool arguments after an approval?

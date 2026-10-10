@@ -24,11 +24,17 @@ The report contains unauthorized-execution rates, legitimate completion, false-b
 
 No model participates in this ablation. The results do not measure prompt-injection attack success, recall of an injection classifier, real-company performance, or enterprise scalability. Repeated limits vary parameters; they are not independent novel attack techniques.
 
+## Stateful control evaluation
+
+The benchmark also runs 21 checks independently of the unsafe-executor comparison: role and tenant spoofing, string/boolean limits, SQL-like dataset names, cross-workflow queries, unknown datasets, malicious record properties, read-only datasets, three legitimate document workflows, waiting for approval, approval identity/argument binding, approved persistence, replay, policy changes for the same identity, and revocation. Each records the expected decision, observed decision, reason and pass/fail. No unsafe baseline is applied to malformed requests. These are gateway invariants, not model attack-success measurements. Pytest additionally verifies policy changes and revocation while calls wait for execution capacity, concurrent ticket consumption, and custom role/dataset provisioning.
+
 ## Live-model smoke verification
 
 `scripts/verify_live.py` uses the configured provider without a scripted planner. It asks a real model to query permitted tickets, attempt a prohibited payroll query, and request an export. The report records observed tool choices, decisions, model answers, duration, and completion. If the model refuses a prohibited query before issuing a tool call, the report describes a refusal; it does not invent a gateway block.
 
 Live-model output is stochastic and hardware-sensitive even at temperature zero. The smoke suite supports operational compatibility claims, not broad security claims. Larger experiments need a fixed model digest, prompt corpus, attack taxonomy, multiple runs, explicit leakage criteria, and a holdout set.
+
+`--workflows --output artifacts/live-workflows.json` adds developer issue and analyst incident requests using their separate identities. These require a real model to use stored documents, query the corresponding dataset, and request approval for record creation. The REST/MCP tests separately verify approved persistence and replay; a model requesting approval alone is not evidence that the write executed.
 
 ## Résumé wording
 

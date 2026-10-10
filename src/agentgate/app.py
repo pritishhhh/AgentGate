@@ -29,7 +29,7 @@ class SecurityMiddleware:
         path = scope["path"]
         origin = headers.get("origin")
         host = headers.get("host", "").split(":")[0]
-        if host not in ("localhost", "127.0.0.1", "testserver"):
+        if host not in self.settings.allowed_hosts:
             return await JSONResponse({"detail": "untrusted_host"}, 400)(scope, receive, send)
         if origin and origin not in self.settings.allowed_origins:
             return await JSONResponse({"detail": "untrusted_origin"}, 403)(scope, receive, send)
@@ -132,6 +132,11 @@ def create_app(settings: Settings | None = None, provider=None):
     def tools(principal=Depends(current)):
         return {"tools": gateway.schemas()}
 
+    @app.get("/api/datasets")
+    def datasets(principal=Depends(current)):
+        labels = gateway.policy().classifications.get(principal.role, [])
+        return {"datasets": store.datasets(principal.tenant, labels)}
+
     @app.post("/api/tools/invoke")
     async def invoke(call: ToolCall, principal=Depends(current)):
         result = await gateway.invoke(principal, call)
@@ -228,6 +233,8 @@ def create_app(settings: Settings | None = None, provider=None):
 
     @app.post("/api/principals")
     def register(body: RegisterPrincipal, principal=Depends(admin)):
+        if body.role not in gateway.policy().roles:
+            raise HTTPException(400, "role_not_configured")
         registered, token = store.issue(body.name, body.role, body.tenant)
         store.audit(
             principal.id, {"tool": "identity_register", "decision": "allow", "target_id": registered.id}

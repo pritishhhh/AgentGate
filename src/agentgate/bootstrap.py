@@ -6,6 +6,7 @@ import yaml
 
 from .models import Policy
 from .store import Store, canonical
+from .workflows import seed_workflows
 
 
 def initialize(directory: Path, seed: bool = True) -> dict:
@@ -21,7 +22,7 @@ def initialize(directory: Path, seed: bool = True) -> dict:
         )
     tokens = {}
     if not store.principals():
-        for role in ("admin", "support", "finance"):
+        for role in store.get_setting("policy")["roles"]:
             principal, token = store.issue(f"{role.title()} operator", role, "acme")
             tokens[role] = {"principal_id": principal.id, "token": token}
         # Local convenience file, excluded from Git. API never serves this file.
@@ -101,4 +102,5 @@ def initialize(directory: Path, seed: bool = True) -> dict:
                                 ),
                             ),
                         )
+        seed_workflows(store)
     return tokens

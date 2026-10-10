@@ -12,6 +12,7 @@ The same boundary powers a web console, a REST tool API, and a standards-based M
 - **Identity-bound authorization:** high-entropy per-agent credentials stored as SHA-256 hashes; tenant and role come from the server. Revocation and current policy are checked for each tool action.
 - **Resource isolation:** searches filter trusted tenant/classification metadata before returning results. Direct reads and dataset queries enforce the same boundary. Caller-supplied roles or tenants are rejected.
 - **Real tools:** stored document search/read, parameterized database queries, downloadable CSV exports, and operator-configured HTTP integrations. Import your own documents through the CLI.
+- **Configurable workflows:** custom policy roles and trusted dataset catalogs; document assistance, developer triage, and security incident handling share the same boundary. Schema-validated writes persist only after the configured approval requirement is satisfied.
 - **Human approvals:** 10-minute, single-use approval tickets bound to the exact normalized request and requesting identity. Approval never overrides a resource denial.
 - **Data protection:** recursive redaction of supported email, US SSN, and selected API-key patterns on tool output and model input/output. Model text is buffered before presentation to prevent leaking patterns split across streaming chunks.
 - **Evidence:** live audit events with argument hashes, decisions, policy versions, redaction counts, and timing; an HMAC-linked chain verifier.
@@ -59,11 +60,21 @@ Open **http://127.0.0.1:8000**. In a second terminal, get the support credential
 
 Paste that credential into the dashboard. It stays in browser memory and is cleared when you disconnect. Use `--role admin` in a separate browser session to review approvals or manage identities. Initial plaintext credentials are kept in the Git-ignored `data/credentials.json` for local setup; the database stores token hashes. Do not publish this file.
 
+On Windows, append `--copy` to copy a credential directly to the clipboard without printing it. The access token is an AgentGate login credential, independent of GitHub or a model-provider API key. `support` has limited document/ticket permissions; `developer` and `analyst` enable their respective workflows; `admin` manages approvals, identities, and policy. Existing installations can run `agentgate examples` to install the additional example roles/data without replacing existing tokens.
+
 Try: **“Find the support escalation guide and summarize the process.”**
 
 Linux/macOS: activate `.venv`, run `pip install -e '.[dev]'`, install Ollama using its official instructions, and run `agentgate init`, `ollama pull qwen3:1.7b`, and `agentgate serve`.
 
 ## Demo workflows
+
+| Application | Example identity | Actual tool operations |
+|---|---|---|
+| Document assistant | support | Read/search labeled documents and query support tickets |
+| Developer automation | developer | Read development guidance, query issues, request an approved issue creation |
+| Incident response | analyst | Read the response runbook, query alerts, request an approved incident creation |
+
+These are example configurations, not built-in role restrictions. Use custom role names in the policy and issue identities through the administrator dashboard. `admin` remains the reserved control-plane role. [Workflow guide](docs/WORKFLOWS.md) includes exact tool requests and configuration steps.
 
 | Workflow | Expected result with a support credential |
 |---|---|
@@ -165,6 +176,8 @@ Copy `.env.example` to `.env` if you need overrides. The CLI loads it without re
 
 The benchmark creates a disposable database and evaluates **64 forced tool calls across 10 scenario families**: 32 unauthorized actions and 32 permitted reads. Parameter variations account for multiple cases within a family. The unsafe reference directly calls the executor with authorization removed; it is inaccessible through REST and MCP. This measures enforcement under attempted misuse, **not LLM prompt-injection attack success**. See [evaluation methodology](docs/EVALUATION.md).
 
+The same report separately records **21 stateful control checks** covering identity spoofing, malicious arguments, cross-workflow access, schema validation, approval binding/replay, policy changes, and revocation. Failed checks make the benchmark command exit unsuccessfully.
+
 Run the real-model smoke suite after starting Ollama:
 
 ```powershell
@@ -172,6 +185,8 @@ Run the real-model smoke suite after starting Ollama:
 ```
 
 It uses the configured real provider, saves a redacted transcript, and checks an authorized query, a prohibited query, and an approval request. Model behavior is reported separately from the deterministic gateway benchmark.
+
+Add `--workflows --output artifacts/live-workflows.json` to also verify real developer issue and analyst incident planning through the same provider and gateway.
 
 ## Docker
 
@@ -183,6 +198,10 @@ docker compose exec agentgate agentgate credentials --role support
 The container runs as an unprivileged user and stores data in a named volume. The published port binds only to localhost. On Windows/macOS Docker Desktop, the model URL points to host Ollama. Ollama must be reachable from the container; its default loopback binding can prevent that. Native Python is the default supported local path. For an isolated Docker model deployment, run an Ollama service on the same private Docker network and point `AGENTGATE_MODEL_URL` at that service. Do not expose the model port publicly.
 
 The container build and REST/MCP/security workflow have been verified on Docker Desktop. A running container can be checked with `python scripts/verify_container.py --container <name> --url http://127.0.0.1:<port>`. The script reads bootstrap credentials inside the container without displaying them. Add `--with-model` to require a live model-driven task; the host must have sufficient free memory for inference as well as Docker. CI also builds the image and runs the container smoke check. See [verification results](docs/VERIFICATION.md) and [security guidance](docs/SECURITY.md).
+
+## Hosting
+
+Vercel can host the dashboard with a separately hosted AgentGate backend. This SQLite edition requires a persistent backend disk for credentials, policy, approvals, exports, and the audit key; local Ollama also needs a reachable model server. Moving the entire application into a serverless function requires a storage/provider redesign. See [deployment guidance](docs/DEPLOYMENT.md) for the prepared Vercel frontend build and backend configuration.
 
 ## Submission archive
 
@@ -203,7 +222,7 @@ artifacts/       generated benchmark and live-model reports
 
 ## Project context
 
-This is an independent portfolio project inspired by the problem of securing agent tool access. It is not affiliated with Zscaler and does not claim to reproduce its platform. Its emphasis is practical least privilege, deterministic execution controls, and inspectable evidence.
+AgentGate is an independent, general-purpose portfolio project for governing agent tool access across documents, development operations, and incident response. Its emphasis is practical least privilege, deterministic execution controls, and inspectable evidence.
 
 License: MIT.
 

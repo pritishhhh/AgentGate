@@ -2,10 +2,14 @@ version: 1
 roles:
   support: [search_documents, read_document, query_records, export_report, invoke_connector]
   finance: [search_documents, read_document, query_records, export_report, invoke_connector]
-  admin: [search_documents, read_document, query_records, export_report, invoke_connector]
+  admin: [search_documents, read_document, query_records, create_record, export_report, invoke_connector]
+  developer: [search_documents, read_document, query_records, create_record, export_report, invoke_connector]
+  analyst: [search_documents, read_document, query_records, create_record, export_report, invoke_connector]
 classifications:
   support: [public, support]
   finance: [public, finance]
-  admin: [public, support, finance]
-approval_tools: [export_report]
+  admin: [public, support, finance, development, security]
+  developer: [public, development]
+  analyst: [public, security]
+approval_tools: [export_report, create_record]
 

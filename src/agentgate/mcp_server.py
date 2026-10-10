@@ -15,7 +15,7 @@ def build_mcp(gateway):
         streamable_http_path="/",
         transport_security=TransportSecuritySettings(
             enable_dns_rebinding_protection=True,
-            allowed_hosts=["127.0.0.1:*", "localhost:*", "testserver"],
+            allowed_hosts=[item for host in gateway.settings.allowed_hosts for item in (host, host + ":*")],
             allowed_origins=list(gateway.settings.allowed_origins),
         ),
     )
@@ -39,8 +39,15 @@ def build_mcp(gateway):
 
     @mcp.tool()
     async def query_records(dataset: str, ctx: Context, limit: int = 10) -> dict[str, Any]:
-        """Query the tickets or payroll dataset under the current policy."""
+        """Query an operator-registered dataset under the current policy."""
         return await invoke(ctx, "query_records", {"dataset": dataset, "limit": limit})
+
+    @mcp.tool()
+    async def create_record(
+        dataset: str, record: dict, ctx: Context, approval_id: str | None = None
+    ) -> dict[str, Any]:
+        """Persist an authorized record under its operator-defined schema and approval policy."""
+        return await invoke(ctx, "create_record", {"dataset": dataset, "record": record}, approval_id)
 
     @mcp.tool()
     async def export_report(

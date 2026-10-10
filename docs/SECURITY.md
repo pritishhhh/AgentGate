@@ -11,13 +11,13 @@ The enforcement point is `Gateway.invoke`. REST and MCP route every tool through
 ## Controls and intended invariants
 
 1. **Identity:** random tokens contain 256 bits of entropy and are stored as SHA-256 digests. Tenant, role, and agent ID are not accepted as tool arguments. Revocation is rechecked on each action.
-2. **Authorization:** unlisted tools and labels default to denial. Search filters metadata before exposing content. Direct reads use the same tenant/label rules. Dataset names and query bounds are enums, not SQL strings.
+2. **Authorization:** unlisted tools and labels default to denial. Search filters metadata before exposing content. Direct reads use the same tenant/label rules. Dataset names are validated identifiers resolved against trusted tenant-scoped metadata; queries are parameterized with bounded integer limits. Writable datasets enforce operator-defined JSON schemas. Roles are configurable; only the reserved admin role manages control-plane endpoints.
 3. **Approval:** tickets bind identity, tool, and normalized arguments; approval expires in 10 minutes. A database-atomic state transition permits only one consumer. Policy authorization runs even for approved calls.
 4. **Connectors:** destinations/methods are operator-owned. Redirects are rejected; strict schemas prevent arbitrary payload keys. Payload and response sizes are bounded. Backend credentials never enter model context.
 5. **DLP:** complete text is inspected before it is exposed to the assistant or browser. Supported patterns are applied recursively. Export cells neutralize formula prefixes. Input prompts are redacted before inference.
 6. **Audit:** argument hashes replace raw tool inputs. Results and prompts are not stored in audit events. HMAC-linked records detect modification, reordering, and insertion without the MAC key.
 7. **Availability:** per-identity persistent sliding-window limits; four concurrent model runs; 16 concurrent tools; bounded agent steps, upstream timeouts, and request/response lengths.
-8. **Browser and transport:** localhost Host allowlist, exact Origin allowlist, server credentials required for REST/MCP, same-origin UI, CSP, and no token persistence in browser storage.
+8. **Browser and transport:** configurable explicit Host allowlist (localhost by default), exact Origin allowlist, server credentials required for REST/MCP, same-origin UI, CSP, and no token persistence in browser storage.
 
 ## Honest limits
 

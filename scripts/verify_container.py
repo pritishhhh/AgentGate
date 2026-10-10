@@ -86,7 +86,7 @@ async def main():
         async with streamable_http_client(base + "/mcp/", http_client=client) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
-                assert len((await session.list_tools()).tools) == 5
+                assert len((await session.list_tools()).tools) == 6
                 result = await session.call_tool("query_records", {"dataset": "payroll"})
                 assert result.structuredContent["decision"] == "deny"
     uid = subprocess.check_output(["docker", "exec", args.container, "id", "-u"], text=True).strip()

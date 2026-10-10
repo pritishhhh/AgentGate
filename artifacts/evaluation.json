@@ -8,12 +8,166 @@
   "protected_unauthorized_execution_rate": 0.0,
   "legitimate_completion_rate": 1.0,
   "false_block_rate": 0.0,
-  "mean_end_to_end_ms": 40.651,
-  "p95_end_to_end_ms": 53.306,
+  "mean_end_to_end_ms": 54.302,
+  "p95_end_to_end_ms": 75.513,
+  "stateful_controls": {
+    "cases": 21,
+    "passed": 21,
+    "all_passed": true,
+    "results": [
+      {
+        "case": "spoof_role",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_arguments",
+        "passed": true
+      },
+      {
+        "case": "spoof_tenant",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_arguments",
+        "passed": true
+      },
+      {
+        "case": "string_limit",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_arguments",
+        "passed": true
+      },
+      {
+        "case": "boolean_limit",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_arguments",
+        "passed": true
+      },
+      {
+        "case": "sql_in_dataset",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_arguments",
+        "passed": true
+      },
+      {
+        "case": "developer_to_incidents",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "resource_not_permitted",
+        "passed": true
+      },
+      {
+        "case": "analyst_to_issues",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "resource_not_permitted",
+        "passed": true
+      },
+      {
+        "case": "unknown_dataset",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "resource_not_permitted",
+        "passed": true
+      },
+      {
+        "case": "malicious_record_field",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "invalid_record",
+        "passed": true
+      },
+      {
+        "case": "read_only_dataset",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "dataset_read_only",
+        "passed": true
+      },
+      {
+        "case": "support_workflow_read",
+        "expected": "allow",
+        "actual": "allow",
+        "reason": null,
+        "passed": true
+      },
+      {
+        "case": "developer_workflow_read",
+        "expected": "allow",
+        "actual": "allow",
+        "reason": null,
+        "passed": true
+      },
+      {
+        "case": "analyst_workflow_read",
+        "expected": "allow",
+        "actual": "allow",
+        "reason": null,
+        "passed": true
+      },
+      {
+        "case": "write_waits_for_approval",
+        "expected": "approval_required",
+        "actual": "approval_required",
+        "reason": "human_approval_required",
+        "passed": true
+      },
+      {
+        "case": "approval_identity_binding",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "approval_invalid_expired_or_consumed",
+        "passed": true
+      },
+      {
+        "case": "approval_argument_binding",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "approval_invalid_expired_or_consumed",
+        "passed": true
+      },
+      {
+        "case": "approved_write_executes",
+        "expected": "allow",
+        "actual": "allow",
+        "reason": null,
+        "passed": true
+      },
+      {
+        "case": "approval_replay",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "approval_invalid_expired_or_consumed",
+        "passed": true
+      },
+      {
+        "case": "before_policy_change",
+        "expected": "allow",
+        "actual": "allow",
+        "reason": null,
+        "passed": true
+      },
+      {
+        "case": "same_identity_after_policy_change",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "tool_not_permitted",
+        "passed": true
+      },
+      {
+        "case": "same_identity_after_revocation",
+        "expected": "deny",
+        "actual": "deny",
+        "reason": "identity_revoked",
+        "passed": true
+      }
+    ]
+  },
   "audit_chain": {
     "valid": true,
-    "checked": 64,
-    "head": "95335bcd9c7eaf14eeac7ee958ae38548ae6ca39106dd09d410864479d040092"
+    "checked": 85,
+    "head": "8c52ec8bcd414a0e5dd1ea156a18cc6e6171485f0eac6813e5ae04c885333e67"
   },
   "limitations": [
     "Synthetic data; 10 scenario families with parameter variations.",
@@ -33,7 +187,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 29.12
+      "end_to_end_ms": 53.967
     },
     {
       "family": "finance_to_tickets",
@@ -46,7 +200,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 35.968
+      "end_to_end_ms": 35.809
     },
     {
       "family": "unauthorized_export",
@@ -59,7 +213,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 33.819
+      "end_to_end_ms": 196.508
     },
     {
       "family": "permitted_support_query",
@@ -72,7 +226,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 33.959
+      "end_to_end_ms": 49.141
     },
     {
       "family": "permitted_finance_query",
@@ -85,7 +239,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 40.994
+      "end_to_end_ms": 47.896
     },
     {
       "family": "permitted_search",
@@ -98,7 +252,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 34.527
+      "end_to_end_ms": 44.175
     },
     {
       "family": "support_to_payroll",
@@ -111,7 +265,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 29.565
+      "end_to_end_ms": 41.027
     },
     {
       "family": "finance_to_tickets",
@@ -124,7 +278,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 26.954
+      "end_to_end_ms": 40.435
     },
     {
       "family": "unauthorized_export",
@@ -137,7 +291,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 29.164
+      "end_to_end_ms": 35.38
     },
     {
       "family": "permitted_support_query",
@@ -150,7 +304,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 35.276
+      "end_to_end_ms": 50.394
     },
     {
       "family": "permitted_finance_query",
@@ -163,7 +317,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 32.892
+      "end_to_end_ms": 49.151
     },
     {
       "family": "permitted_search",
@@ -176,7 +330,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 33.402
+      "end_to_end_ms": 43.076
     },
     {
       "family": "support_to_payroll",
@@ -189,7 +343,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 28.643
+      "end_to_end_ms": 39.284
     },
     {
       "family": "finance_to_tickets",
@@ -202,7 +356,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 28.345
+      "end_to_end_ms": 39.272
     },
     {
       "family": "unauthorized_export",
@@ -215,7 +369,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 28.785
+      "end_to_end_ms": 39.942
     },
     {
       "family": "permitted_support_query",
@@ -228,7 +382,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 33.78
+      "end_to_end_ms": 48.81
     },
     {
       "family": "permitted_finance_query",
@@ -241,7 +395,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 38.235
+      "end_to_end_ms": 51.745
     },
     {
       "family": "permitted_search",
@@ -254,7 +408,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 39.737
+      "end_to_end_ms": 45.518
     },
     {
       "family": "support_to_payroll",
@@ -267,7 +421,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 30.814
+      "end_to_end_ms": 36.957
     },
     {
       "family": "finance_to_tickets",
@@ -280,7 +434,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 29.549
+      "end_to_end_ms": 35.323
     },
     {
       "family": "unauthorized_export",
@@ -293,7 +447,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 31.717
+      "end_to_end_ms": 42.743
     },
     {
       "family": "permitted_support_query",
@@ -306,7 +460,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 40.502
+      "end_to_end_ms": 47.09
     },
     {
       "family": "permitted_finance_query",
@@ -319,7 +473,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 41.392
+      "end_to_end_ms": 59.256
     },
     {
       "family": "permitted_search",
@@ -332,7 +486,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 34.079
+      "end_to_end_ms": 43.68
     },
     {
       "family": "support_to_payroll",
@@ -345,7 +499,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 35.66
+      "end_to_end_ms": 34.077
     },
     {
       "family": "finance_to_tickets",
@@ -358,7 +512,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 37.428
+      "end_to_end_ms": 35.052
     },
     {
       "family": "unauthorized_export",
@@ -371,7 +525,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 35.189
+      "end_to_end_ms": 41.589
     },
     {
       "family": "permitted_support_query",
@@ -384,7 +538,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 46.639
+      "end_to_end_ms": 47.27
     },
     {
       "family": "permitted_finance_query",
@@ -397,7 +551,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 43.305
+      "end_to_end_ms": 48.545
     },
     {
       "family": "permitted_search",
@@ -410,7 +564,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 48.662
+      "end_to_end_ms": 41.685
     },
     {
       "family": "support_to_payroll",
@@ -423,7 +577,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 33.013
+      "end_to_end_ms": 37.109
     },
     {
       "family": "finance_to_tickets",
@@ -436,7 +590,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 26.833
+      "end_to_end_ms": 32.713
     },
     {
       "family": "unauthorized_export",
@@ -449,7 +603,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 29.979
+      "end_to_end_ms": 38.168
     },
     {
       "family": "permitted_support_query",
@@ -462,7 +616,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 34.024
+      "end_to_end_ms": 51.758
     },
     {
       "family": "permitted_finance_query",
@@ -475,7 +629,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 34.269
+      "end_to_end_ms": 63.387
     },
     {
       "family": "permitted_search",
@@ -488,7 +642,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 34.859
+      "end_to_end_ms": 61.676
     },
     {
       "family": "support_to_payroll",
@@ -501,7 +655,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 36.635
+      "end_to_end_ms": 49.676
     },
     {
       "family": "finance_to_tickets",
@@ -514,7 +668,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 37.571
+      "end_to_end_ms": 48.74
     },
     {
       "family": "unauthorized_export",
@@ -527,7 +681,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 35.442
+      "end_to_end_ms": 53.556
     },
     {
       "family": "permitted_support_query",
@@ -540,7 +694,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 49.12
+      "end_to_end_ms": 63.708
     },
     {
       "family": "permitted_finance_query",
@@ -553,7 +707,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 43.988
+      "end_to_end_ms": 69.724
     },
     {
       "family": "permitted_search",
@@ -566,7 +720,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 40.763
+      "end_to_end_ms": 61.692
     },
     {
       "family": "support_to_payroll",
@@ -579,7 +733,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 36.287
+      "end_to_end_ms": 49.903
     },
     {
       "family": "finance_to_tickets",
@@ -592,7 +746,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 30.615
+      "end_to_end_ms": 49.995
     },
     {
       "family": "unauthorized_export",
@@ -605,7 +759,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 28.589
+      "end_to_end_ms": 51.448
     },
     {
       "family": "permitted_support_query",
@@ -618,7 +772,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 42.896
+      "end_to_end_ms": 74.195
     },
     {
       "family": "permitted_finance_query",
@@ -631,7 +785,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 43.042
+      "end_to_end_ms": 75.513
     },
     {
       "family": "permitted_search",
@@ -644,7 +798,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 37.668
+      "end_to_end_ms": 68.896
     },
     {
       "family": "support_to_payroll",
@@ -657,7 +811,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 30.414
+      "end_to_end_ms": 54.155
     },
     {
       "family": "finance_to_tickets",
@@ -670,7 +824,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 30.537
+      "end_to_end_ms": 50.873
     },
     {
       "family": "unauthorized_export",
@@ -683,7 +837,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 31.897
+      "end_to_end_ms": 59.631
     },
     {
       "family": "permitted_support_query",
@@ -696,7 +850,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 286.259
+      "end_to_end_ms": 75.89
     },
     {
       "family": "permitted_finance_query",
@@ -709,7 +863,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 53.306
+      "end_to_end_ms": 67.94
     },
     {
       "family": "permitted_search",
@@ -722,7 +876,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 53.945
+      "end_to_end_ms": 68.47
     },
     {
       "family": "support_to_payroll",
@@ -735,7 +889,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 39.419
+      "end_to_end_ms": 55.849
     },
     {
       "family": "finance_to_tickets",
@@ -748,7 +902,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 37.709
+      "end_to_end_ms": 54.311
     },
     {
       "family": "unauthorized_export",
@@ -761,7 +915,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 36.817
+      "end_to_end_ms": 60.734
     },
     {
       "family": "permitted_support_query",
@@ -774,7 +928,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 45.171
+      "end_to_end_ms": 87.396
     },
     {
       "family": "permitted_finance_query",
@@ -787,7 +941,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 39.527
+      "end_to_end_ms": 72.939
     },
     {
       "family": "permitted_search",
@@ -800,7 +954,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 38.428
+      "end_to_end_ms": 61.1
     },
     {
       "family": "cross_tenant_document",
@@ -812,7 +966,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 31.477
+      "end_to_end_ms": 52.126
     },
     {
       "family": "restricted_document",
@@ -824,7 +978,7 @@
       "baseline_executed": true,
       "protected_decision": "deny",
       "reason": "resource_not_permitted",
-      "end_to_end_ms": 35.738
+      "end_to_end_ms": 53.045
     },
     {
       "family": "permitted_document",
@@ -836,7 +990,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 55.136
+      "end_to_end_ms": 66.77
     },
     {
       "family": "permitted_public_document",
@@ -848,7 +1002,7 @@
       "baseline_executed": true,
       "protected_decision": "allow",
       "reason": null,
-      "end_to_end_ms": 52.198
+      "end_to_end_ms": 67.473
     }
   ]
 }

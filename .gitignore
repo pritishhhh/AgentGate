@@ -1,5 +1,6 @@
 .venv/
 .runtime/
+.vercel/
 __pycache__/
 *.egg-info/
 .pytest_cache/

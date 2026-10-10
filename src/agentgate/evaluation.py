@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .bootstrap import initialize
 from .config import Settings
+from .control_evaluation import evaluate_controls
 from .gateway import TOOL_MODELS, Gateway
 from .models import ToolCall
 from .store import Store
@@ -102,6 +103,7 @@ async def evaluate(output: Path):
         attacks = [r for r in records if not r["expected_permitted"]]
         legitimate = [r for r in records if r["expected_permitted"]]
         latencies = sorted(r["end_to_end_ms"] for r in records)
+        controls = await evaluate_controls(gateway, store, tokens)
         report = {
             "benchmark": "forced-tool authorization ablation",
             "cases": len(records),
@@ -117,6 +119,7 @@ async def evaluate(output: Path):
             "false_block_rate": sum(r["protected_decision"] != "allow" for r in legitimate) / len(legitimate),
             "mean_end_to_end_ms": round(statistics.mean(latencies), 3),
             "p95_end_to_end_ms": latencies[math.ceil(len(latencies) * 0.95) - 1],
+            "stateful_controls": controls,
             "audit_chain": store.verify_audit(),
             "limitations": [
                 "Synthetic data; 10 scenario families with parameter variations.",
@@ -128,4 +131,6 @@ async def evaluate(output: Path):
         }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    return {k: v for k, v in report.items() if k != "results"}
+    summary = {k: v for k, v in report.items() if k not in ("results", "stateful_controls")}
+    summary["stateful_controls"] = {k: v for k, v in controls.items() if k != "results"}
+    return summary

@@ -44,6 +44,9 @@ class Store:
                     title TEXT NOT NULL, content TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS records(
                     id INTEGER PRIMARY KEY, tenant TEXT NOT NULL, dataset TEXT NOT NULL, content TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS datasets(
+                    tenant TEXT NOT NULL, name TEXT NOT NULL, classification TEXT NOT NULL,
+                    record_schema TEXT, PRIMARY KEY(tenant,name));
                 CREATE TABLE IF NOT EXISTS approvals(
                     id TEXT PRIMARY KEY, principal_id TEXT NOT NULL, request_hash TEXT NOT NULL,
                     tool TEXT NOT NULL, arguments TEXT NOT NULL, status TEXT NOT NULL,
@@ -162,6 +165,49 @@ class Store:
                 (tenant, dataset, limit),
             ).fetchall()
         return [json.loads(r[0]) for r in rows]
+
+    def dataset(self, tenant: str, name: str):
+        with self.connect() as db:
+            row = db.execute("SELECT * FROM datasets WHERE tenant=? AND name=?", (tenant, name)).fetchone()
+        return {**dict(row), "record_schema": json.loads(row["record_schema"])} if row else None
+
+    def datasets(self, tenant: str, labels: list[str]):
+        with self.connect() as db:
+            rows = db.execute(
+                "SELECT name,classification,record_schema FROM datasets WHERE tenant=?", (tenant,)
+            )
+            return [
+                {**dict(row), "record_schema": json.loads(row["record_schema"])}
+                for row in rows
+                if row["classification"] in labels
+            ]
+
+    def add_dataset(self, definition):
+        from .datasets import validate_definition
+
+        validate_definition(definition)
+        # Catalog labels/schemas are immutable. A new classification requires a new dataset name.
+        with self.connect() as db:
+            return (
+                db.execute(
+                    "INSERT OR IGNORE INTO datasets VALUES(?,?,?,?)",
+                    (
+                        definition.tenant,
+                        definition.name,
+                        definition.classification,
+                        canonical(definition.record_schema),
+                    ),
+                ).rowcount
+                == 1
+            )
+
+    def create_record(self, tenant: str, dataset: str, record: dict):
+        with self.connect() as db:
+            cursor = db.execute(
+                "INSERT INTO records(tenant,dataset,content) VALUES(?,?,?)",
+                (tenant, dataset, canonical(record)),
+            )
+            return cursor.lastrowid
 
     def pending(self, principal_id: str, tool: str, arguments: dict):
         request_hash = digest({"principal_id": principal_id, "tool": tool, "arguments": arguments})
