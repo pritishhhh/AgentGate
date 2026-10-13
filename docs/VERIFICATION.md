@@ -39,13 +39,13 @@ CI builds the image and verifies its REST/MCP/security workflow. CI does not req
 
 During the generalized edition's local rebuild, Docker Desktop reported that it was unable to start. The earlier container verification above describes the previous edition. The repository's CI builds and checks the current revision independently; consult its matching commit run for current container evidence.
 
-## External services
-
 ## Vercel entrypoint checks on October 13, 2026
 
 The root `app.py` exports a stateless FastAPI frontend/proxy. All 49 Python tests passed, including eight entrypoint/proxy checks for read-only startup, missing-backend handling, fixed HTTPS destinations, credential forwarding, SSE, CSV downloads, MCP headers, request limits, redirect rejection, and sanitized network errors. The 64-case authorization evaluation and 21 stateful checks also passed. Proxy tests use an inspected HTTP test transport; these results alone do not establish a hosted execution backend. Without `AGENTGATE_BACKEND_URL`, the deployment serves the dashboard and reports unavailable backend operations explicitly.
 
+Vercel reported a successful production deployment for commit `17ce258`, resolving the missing-entrypoint build error. [GitHub CI](https://github.com/pritishhhh/AgentGate/actions/runs/38360401082) also passed, including the Docker build and container smoke check. Unauthenticated requests to the generated deployment URL redirected to Vercel sign-in protection, so those probes did not independently verify protected page/API responses. The persistent backend has not been hosted yet.
+
 ## External services
 
-No real private company documents, cloud accounts, or third-party production services were used. The configured HTTP connector test ran against a real local HTTP service.
+No real private company documents or third-party production tool services were used. The configured HTTP connector test ran against a real local HTTP service. Vercel now hosts the frontend deployment described above; the local model and stateful tool backend remain separate.
 
