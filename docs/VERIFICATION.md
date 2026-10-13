@@ -49,6 +49,8 @@ Vercel reported a successful production deployment for commit `17ce258`, resolvi
 
 The login page displays the intentionally public read-only token, with Copy and Use visitor token buttons. All 61 Python tests passed, including public login without a hosted backend, operator/demo token separation, real gateway reads/redaction/audit, finance and tenant isolation, rejected identity spoofing, blocked writes/connectors/admin/model actions, and body-size bounds. Headless Edge verified clipboard contents, visitor login, tool execution/denial, actual session audit rendering, read-only controls, and mobile layout. The isolated public demo uses in-memory SQLite; no operator identities or private resources are copied into it.
 
+The production site at [agent-gate-f7n7.vercel.app](https://agent-gate-f7n7.vercel.app/) was verified with actual HTTP requests and the same headless Edge visitor test: homepage, public token discovery, and visitor login returned HTTP 200. Clipboard copy, read-only document execution, payroll denial, real session audit rendering, disabled admin/model controls, and mobile layout passed on the deployed site. Separate deployed API checks confirmed permitted record queries, rejected exports, and HTTP 403 for identity creation. [CI for the visitor release](https://github.com/pritishhhh/AgentGate/actions/runs/38363923763) passed, including the Docker build and container smoke test.
+
 ## External services
 
 No real private company documents or third-party production tool services were used. The configured HTTP connector test ran against a real local HTTP service. Vercel now hosts the frontend deployment described above; the local model and stateful tool backend remain separate.
