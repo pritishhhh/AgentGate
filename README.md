@@ -203,6 +203,8 @@ The container build and REST/MCP/security workflow have been verified on Docker 
 
 Vercel can host the dashboard with a separately hosted AgentGate backend. This SQLite edition requires a persistent backend disk for credentials, policy, approvals, exports, and the audit key; local Ollama also needs a reachable model server. Moving the entire application into a serverless function requires a storage/provider redesign. See [deployment guidance](docs/DEPLOYMENT.md) for the prepared Vercel frontend build and backend configuration.
 
+For a GitHub import on Vercel, use the **FastAPI** preset with root `./`. The root `app.py` is the stateless frontend/proxy entrypoint. Set `AGENTGATE_BACKEND_URL` to your hosted backend's HTTPS origin and redeploy. Without it, the dashboard loads but API requests clearly report that the backend is not connected; no temporary credentials or fake agent results are generated.
+
 ## Submission archive
 
 Run `python scripts/package.py` to generate `artifacts/AgentGate-source.zip`. The archive contains source, documentation, tests, and selected verification artifacts. It excludes credentials, `.env`, runtime databases, downloaded models, and the virtual environment. Publish the contents of this project directory as the repository root so the included CI workflow runs correctly.

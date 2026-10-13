@@ -41,5 +41,11 @@ During the generalized edition's local rebuild, Docker Desktop reported that it 
 
 ## External services
 
+## Vercel entrypoint checks on October 13, 2026
+
+The root `app.py` exports a stateless FastAPI frontend/proxy. All 49 Python tests passed, including eight entrypoint/proxy checks for read-only startup, missing-backend handling, fixed HTTPS destinations, credential forwarding, SSE, CSV downloads, MCP headers, request limits, redirect rejection, and sanitized network errors. The 64-case authorization evaluation and 21 stateful checks also passed. Proxy tests use an inspected HTTP test transport; these results alone do not establish a hosted execution backend. Without `AGENTGATE_BACKEND_URL`, the deployment serves the dashboard and reports unavailable backend operations explicitly.
+
+## External services
+
 No real private company documents, cloud accounts, or third-party production services were used. The configured HTTP connector test ran against a real local HTTP service.
 

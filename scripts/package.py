@@ -6,6 +6,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 output = root / "artifacts" / "AgentGate-source.zip"
 allowed_files = [
+    "app.py",
     "README.md",
     "LICENSE",
     "pyproject.toml",

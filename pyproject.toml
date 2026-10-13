@@ -24,6 +24,9 @@ where = ["src"]
 [tool.setuptools.package-data]
 agentgate = ["static/*", "defaults/*"]
 
+[tool.vercel]
+entrypoint = "app:app"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"

@@ -4,6 +4,18 @@ The local dashboard is at http://127.0.0.1:8000. Docker packages the entire back
 
 ## Vercel frontend with a persistent backend
 
+### Import the repository through the Vercel dashboard
+
+Keep the **FastAPI** application preset and root directory `./`. The root `app.py` exports the FastAPI frontend instance and `pyproject.toml` declares `tool.vercel.entrypoint = "app:app"`. This fixes the "No FastAPI entrypoint found" build failure. Leave build/output overrides unset for this preset.
+
+This entrypoint serves the dashboard and proxies API/MCP traffic; it does not initialize SQLite, issue tokens, or run a model inside a function. A deployment without a backend URL can load the dashboard, but authenticated operations return an explicit **Backend not connected** response (HTTP 503). It does not simulate successful agent activity.
+
+After hosting the persistent backend, add `AGENTGATE_BACKEND_URL=https://your-backend-host` to the Vercel project's environment variables and redeploy. Use the backend's real HTTPS origin with no path, query string, or credentials. The backend must allow the frontend's exact Origin. Use credentials issued by that backend; laptop credentials only work if its existing database is securely migrated. Do not put AgentGate login tokens in Vercel build configuration.
+
+The frontend forwards only authentication/protocol headers, bounds request bodies, rejects upstream redirects, and streams tool/agent/audit responses. Identity, permission, approval and audit decisions remain in the backend. Its proxy can run within Vercel function-duration limits; the audit UI reconnects when a stream ends.
+
+### Backend hosting requirements
+
 Vercel supports [FastAPI functions](https://vercel.com/docs/frameworks/backend/fastapi), but this storage implementation is designed for a persistent server. Vercel's [file guidance](https://vercel.com/kb/guide/how-can-i-use-files-in-serverless-functions) recommends external persistent storage for writes. Localhost Ollama on your laptop is also unreachable from a public Vercel deployment.
 
 For this edition, host the backend container on a server with a persistent mounted `/app/data` volume, HTTPS, and access to a model server. The Vercel frontend uses [external rewrites](https://vercel.com/docs/routing/rewrites) to proxy authenticated API/MCP requests to that fixed backend. The browser keeps its token in memory and never receives a model-provider credential.
@@ -26,7 +38,7 @@ $env:AGENTGATE_BACKEND_URL = 'https://api.your-domain.example'
 .\.venv\Scripts\python.exe scripts/build_vercel.py
 ```
 
-This creates `.vercel/output/config.json` and four explicitly selected static files using Vercel's [Build Output API](https://vercel.com/docs/build-output-api). The origin must use HTTPS, contain no credentials, and point to your actual backend. The build does not upload anything. With the Vercel CLI installed and linked to your own project, `vercel deploy --prebuilt` uploads that prepared frontend. Avoid importing the Python repository as an automatic full-backend deployment for this storage edition.
+This alternative creates `.vercel/output/config.json` and four explicitly selected static files using Vercel's [Build Output API](https://vercel.com/docs/build-output-api). The origin must use HTTPS, contain no credentials, and point to your actual backend. The build does not upload anything. With the Vercel CLI installed and linked to your own project, `vercel deploy --prebuilt` uploads that prepared frontend. The dashboard import described above instead uses the new FastAPI frontend/proxy entrypoint; neither method hosts the stateful execution backend inside Vercel.
 
 Before sharing the deployed URL, verify login, a denied tool, approval/replay, CSV downloads, authenticated MCP calls, and SSE streams through the public proxy. Check frontend-origin and backend-host headers on your actual deployment; list both explicitly if the hosting proxy preserves the frontend Host header. Preview domains require their own exact origin entries. Proxy timeout limits may reconnect the audit stream or limit long agent runs. The frontend bundle is locally verified; no public Vercel deployment is claimed as tested.
 
