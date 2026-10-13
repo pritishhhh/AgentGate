@@ -21,6 +21,8 @@ The enforcement point is `Gateway.invoke`. REST and MCP route every tool through
 
 ## Honest limits
 
+The intentionally published visitor token identifies an isolated public demo tenant at `/demo/api/...`. It has only search/read/query permission over bundled synthetic resources. This sandbox uses a separate in-memory database with no operator principals, private data or provider credentials; its audit state is transient. Publishing the visitor token does not expose an administrator token. Full-backend tokens and the public token are not interchangeable. Public demo requests remain subject to argument validation, classification/tenant checks, redaction, request size/rate bounds and the shared gateway. Live AI and consequential operations are unavailable in this mode.
+
 - This is a single-process, SQLite-backed local gateway. It does not include SSO, OAuth resource-server discovery, TLS termination, distributed coordination, or an enterprise identity provider.
 - Redaction detects selected patterns. It does not detect every secret, every national identifier, encoded content, semantic confidentiality, or arbitrary obfuscation. It is not a complete DLP product.
 - Least privilege contains unauthorized actions even when prompt injection changes a model's intent. It does not guarantee correct answers or detect every injection. An action that is permitted by policy can still be undesirable.

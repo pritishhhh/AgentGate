@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from .deployment import backend_origin
+from .public_demo import create_public_demo, demo_profile
 
 SECURITY_HEADERS = {
     "Cache-Control": "no-store",
@@ -45,6 +46,10 @@ def create_frontend(backend: str | None = None, *, transport=None):
         response = await call_next(request)
         response.headers.update(SECURITY_HEADERS)
         return response
+
+    @app.get("/public/demo")
+    def visitor():
+        return demo_profile()
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
     @app.api_route("/mcp", methods=["GET", "POST", "DELETE", "OPTIONS"])
@@ -118,5 +123,6 @@ def create_frontend(backend: str | None = None, *, transport=None):
 
         return StreamingResponse(stream(), status_code=response.status_code, headers=forwarded)
 
+    app.mount("/demo", create_public_demo())
     app.mount("/", StaticFiles(directory=Path(__file__).parent / "static", html=True), name="dashboard")
     return app

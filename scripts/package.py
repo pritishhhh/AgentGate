@@ -32,6 +32,8 @@ for name in (
     "tool-lab.png",
     "mobile.png",
     "login.png",
+    "public-login.png",
+    "public-demo.png",
 ):
     paths.append(root / "artifacts" / name)
 output.parent.mkdir(exist_ok=True)

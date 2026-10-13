@@ -8,11 +8,15 @@ The local dashboard is at http://127.0.0.1:8000. Docker packages the entire back
 
 Keep the **FastAPI** application preset and root directory `./`. The root `app.py` exports the FastAPI frontend instance and `pyproject.toml` declares `tool.vercel.entrypoint = "app:app"`. This fixes the "No FastAPI entrypoint found" build failure. Leave build/output overrides unset for this preset.
 
-This entrypoint serves the dashboard and proxies API/MCP traffic; it does not initialize SQLite, issue tokens, or run a model inside a function. A deployment without a backend URL can load the dashboard, but authenticated operations return an explicit **Backend not connected** response (HTTP 503). It does not simulate successful agent activity.
+This entrypoint serves the dashboard, a public read-only sandbox, and the full-backend API/MCP proxy. The login page exposes a deliberately public visitor token and a copy button. That token routes to `/demo/api/...` and opens an isolated synthetic tenant using the same `Gateway.invoke` enforcement and an in-memory SQLite store. It can execute document reads/search and dataset queries immediately, even without a hosted full backend.
+
+The public demo has no administrator identities, no filesystem exports, no writes/approvals, no HTTP connector permission and no live model calls. Its database, audit key, and audit history are ephemeral per function instance. Each tool response includes its actual audit record so the browser can display the decisions for its own session even when subsequent requests land on another instance. These are real evaluated tool calls, not generated example audit rows. The UI labels synthetic resources, read-only access and unavailable live AI explicitly. Operator state is never created or copied into this database.
+
+Private operator requests at `/api/...` still return **Backend not connected** (HTTP 503) until a full backend URL is configured. Public demo tokens do not authenticate against the private backend, and private operator tokens do not authenticate against the demo.
 
 After hosting the persistent backend, add `AGENTGATE_BACKEND_URL=https://your-backend-host` to the Vercel project's environment variables and redeploy. Use the backend's real HTTPS origin with no path, query string, or credentials. The backend must allow the frontend's exact Origin. Use credentials issued by that backend; laptop credentials only work if its existing database is securely migrated. Do not put AgentGate login tokens in Vercel build configuration.
 
-The frontend forwards only authentication/protocol headers, bounds request bodies, rejects upstream redirects, and streams tool/agent/audit responses. Identity, permission, approval and audit decisions remain in the backend. Its proxy can run within Vercel function-duration limits; the audit UI reconnects when a stream ends.
+The full-backend proxy forwards only authentication/protocol headers, bounds request bodies, rejects upstream redirects, and streams tool/agent/audit responses. Private identity, permission, approval and audit decisions remain in that backend. Its proxy can run within Vercel function-duration limits; the full-backend audit UI reconnects when a stream ends. The public sandbox records only real demo decisions for the current browser session and does not present its transient audit as durable security evidence.
 
 ### Backend hosting requirements
 

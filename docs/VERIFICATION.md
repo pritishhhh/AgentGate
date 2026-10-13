@@ -45,6 +45,10 @@ The root `app.py` exports a stateless FastAPI frontend/proxy. All 49 Python test
 
 Vercel reported a successful production deployment for commit `17ce258`, resolving the missing-entrypoint build error. [GitHub CI](https://github.com/pritishhhh/AgentGate/actions/runs/38360401082) also passed, including the Docker build and container smoke check. Unauthenticated requests to the generated deployment URL redirected to Vercel sign-in protection, so those probes did not independently verify protected page/API responses. The persistent backend has not been hosted yet.
 
+## Public visitor checks on October 13, 2026
+
+The login page displays the intentionally public read-only token, with Copy and Use visitor token buttons. All 61 Python tests passed, including public login without a hosted backend, operator/demo token separation, real gateway reads/redaction/audit, finance and tenant isolation, rejected identity spoofing, blocked writes/connectors/admin/model actions, and body-size bounds. Headless Edge verified clipboard contents, visitor login, tool execution/denial, actual session audit rendering, read-only controls, and mobile layout. The isolated public demo uses in-memory SQLite; no operator identities or private resources are copied into it.
+
 ## External services
 
 No real private company documents or third-party production tool services were used. The configured HTTP connector test ran against a real local HTTP service. Vercel now hosts the frontend deployment described above; the local model and stateful tool backend remain separate.

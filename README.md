@@ -22,6 +22,8 @@ The bundled documents and records are **synthetic fixtures**. The tools execute 
 
 ## Quick start · Windows
 
+The login page displays a **public visitor token** with **Copy** and **Use visitor token** buttons. It opens an isolated read-only demo on both localhost and Vercel, without a separately hosted backend. Visitors can inspect the dashboard, run document/record tools through the actual gateway, and see permission denials and audit decisions. Resources are synthetic; live AI, writes, external connectors, approvals and identity management require the full backend and an appropriate operator credential. The public token grants no access to operator data.
+
 Run these commands from this directory with Python 3.11 or newer:
 
 ```powershell
@@ -203,7 +205,7 @@ The container build and REST/MCP/security workflow have been verified on Docker 
 
 Vercel can host the dashboard with a separately hosted AgentGate backend. This SQLite edition requires a persistent backend disk for credentials, policy, approvals, exports, and the audit key; local Ollama also needs a reachable model server. Moving the entire application into a serverless function requires a storage/provider redesign. See [deployment guidance](docs/DEPLOYMENT.md) for the prepared Vercel frontend build and backend configuration.
 
-For a GitHub import on Vercel, use the **FastAPI** preset with root `./`. The root `app.py` is the stateless frontend/proxy entrypoint. Set `AGENTGATE_BACKEND_URL` to your hosted backend's HTTPS origin and redeploy. Without it, the dashboard loads but API requests clearly report that the backend is not connected; no temporary credentials or fake agent results are generated.
+For a GitHub import on Vercel, use the **FastAPI** preset with root `./`. The root `app.py` serves the frontend, isolated public demo, and full-backend proxy. Public visitor login works immediately. Set `AGENTGATE_BACKEND_URL` to your hosted backend's HTTPS origin to enable private operator logins and full backend operations. The demo uses its own in-memory SQLite database; real gateway decisions are returned with actual audit records, while live model execution remains explicitly unavailable in this public mode.
 
 ## Submission archive
 

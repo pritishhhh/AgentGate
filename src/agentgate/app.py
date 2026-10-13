@@ -13,6 +13,7 @@ from .config import Settings
 from .gateway import GateError, Gateway
 from .mcp_server import build_mcp
 from .models import AgentRequest, ApprovalDecision, PolicyUpdate, RegisterPrincipal, ToolCall
+from .public_demo import create_public_demo, demo_profile
 from .store import Store
 
 
@@ -115,6 +116,10 @@ def create_app(settings: Settings | None = None, provider=None):
     @app.get("/health")
     def health():
         return {"status": "ok", "initialized": store.get_setting("policy") is not None, "version": "1.0.0"}
+
+    @app.get("/public/demo")
+    def visitor():
+        return demo_profile()
 
     @app.get("/api/me")
     def me(principal=Depends(current)):
@@ -250,6 +255,7 @@ def create_app(settings: Settings | None = None, provider=None):
         store.audit(principal.id, {"tool": "identity_revoke", "decision": "allow", "target_id": principal_id})
         return {"ok": True}
 
+    app.mount("/demo", create_public_demo())
     app.mount("/mcp", mcp_app)
     app.mount(
         "/", StaticFiles(directory=str(files("agentgate").joinpath("static")), html=True), name="dashboard"

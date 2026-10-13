@@ -3,6 +3,7 @@ import hmac
 import json
 import secrets
 import sqlite3
+import threading
 import time
 from contextlib import contextmanager
 from pathlib import Path
@@ -20,18 +21,25 @@ def digest(value) -> str:
 
 
 class Store:
-    def __init__(self, directory: Path):
+    def __init__(self, directory: Path | None):
         self.directory = directory
-        directory.mkdir(parents=True, exist_ok=True)
-        self.path = directory / "agentgate.sqlite3"
-        self.key_path = directory / "audit.key"
-        if not self.key_path.exists():
-            try:
-                with self.key_path.open("xb") as f:
-                    f.write(secrets.token_bytes(32))
-            except FileExistsError:
-                pass
-        self.audit_key = self.key_path.read_bytes()
+        self._memory_lock = threading.RLock()
+        self._memory_db = None
+        if directory is None:
+            # Public read-only sandbox only: no operator identities or durable state live here.
+            self._memory_db = sqlite3.connect(":memory:", check_same_thread=False)
+            self.audit_key = secrets.token_bytes(32)
+        else:
+            directory.mkdir(parents=True, exist_ok=True)
+            self.path = directory / "agentgate.sqlite3"
+            self.key_path = directory / "audit.key"
+            if not self.key_path.exists():
+                try:
+                    with self.key_path.open("xb") as f:
+                        f.write(secrets.token_bytes(32))
+                except FileExistsError:
+                    pass
+            self.audit_key = self.key_path.read_bytes()
         with self.connect() as db:
             db.executescript("""
                 PRAGMA journal_mode=WAL;
@@ -63,7 +71,9 @@ class Store:
 
     @contextmanager
     def connect(self):
-        db = sqlite3.connect(self.path, timeout=10)
+        if self._memory_db is not None:
+            self._memory_lock.acquire()
+        db = self._memory_db if self._memory_db is not None else sqlite3.connect(self.path, timeout=10)
         db.row_factory = sqlite3.Row
         try:
             yield db
@@ -72,7 +82,10 @@ class Store:
             db.rollback()
             raise
         finally:
-            db.close()
+            if self._memory_db is not None:
+                self._memory_lock.release()
+            else:
+                db.close()
 
     def issue(self, name: str, role: str, tenant: str) -> tuple[Principal, str]:
         token = "ag_" + secrets.token_urlsafe(32)
@@ -317,3 +330,11 @@ class Store:
                 previous = row["hash"]
                 count += 1
         return {"valid": True, "checked": count, "head": previous}
+
+    def event_by_request(self, principal_id: str, request_id: str):
+        with self.connect() as db:
+            row = db.execute(
+                "SELECT seq,event,hash FROM audit WHERE principal_id=? AND json_extract(event,'$.request_id')=? ORDER BY seq DESC LIMIT 1",
+                (principal_id, request_id),
+            ).fetchone()
+        return {"seq": row["seq"], **json.loads(row["event"]), "hash": row["hash"]} if row else None

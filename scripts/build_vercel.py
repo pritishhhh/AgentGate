@@ -50,6 +50,8 @@ def build(root: Path, backend: str):
                 "continue": True,
             },
             {"src": "/api/(.*)", "dest": origin + "/api/$1"},
+            {"src": "/public/demo", "dest": origin + "/public/demo"},
+            {"src": "/demo/(.*)", "dest": origin + "/demo/$1"},
             {"src": "/mcp/(.*)", "dest": origin + "/mcp/$1"},
             {"src": "/mcp", "dest": origin + "/mcp/"},
             {"src": "/(health|docs|openapi.json)", "dest": origin + "/$1"},
